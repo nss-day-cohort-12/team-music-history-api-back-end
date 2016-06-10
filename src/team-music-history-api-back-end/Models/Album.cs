@@ -11,7 +11,6 @@ namespace team_music_history_api_back_end.Models
         public string Name { get; set; }
         public int Year { get; set; }
         public string Artist { get; set; }
-        public int SongId { get; set; }
         public int MHUserId { get; set; }
 
         public MHUser MHUser { get; set; }

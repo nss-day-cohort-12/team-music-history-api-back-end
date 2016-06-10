@@ -36,7 +36,7 @@ namespace team_music_history_api_back_end.Controllers
                                            MHUserId = mhuser.MHUserId,
                                            Username = mhuser.Username,
                                            EmailAddress = mhuser.EmailAddress
-                                           //Albums = String.Format("/api/Album?MHUserId={0}", mhuser.MHUserId)
+                                           //Albums = mhuser.Albums
                                        };
             if (username != null)
             {
