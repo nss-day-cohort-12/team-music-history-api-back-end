@@ -28,11 +28,12 @@ namespace team_music_history_api_back_end
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = @"Server=(localdb)\mssqllocaldb;Datbase=team-music-history-api-back-end;Trusted_Connection=True;";
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=team-music-history-api-back-end;Trusted_Connection=True;";
             services.AddDbContext<Models.MusicHistoryDbContext>(options => options.UseSqlServer(connection));
 
             // Add framework services.
             services.AddMvc();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
