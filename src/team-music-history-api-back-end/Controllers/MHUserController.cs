@@ -22,34 +22,52 @@ namespace team_music_history_api_back_end.Controllers
             _context = context;
         }
 
+
         // GET: api/values
         [HttpGet]
-        public IActionResult Get([FromQuery] string username)
+        public IActionResult Get()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            IQueryable<MHUser> mhusers = from mhuser in _context.MHUser
-                                       select new MHUser
-                                       {
-                                           MHUserId = mhuser.MHUserId,
-                                           Username = mhuser.Username,
-                                           EmailAddress = mhuser.EmailAddress
-                                           //Albums = mhuser.Albums
-                                       };
-            if (username != null)
-            {
-                mhusers = mhusers.Where(u => u.Username == username);
-            }
 
-            if (mhusers == null)
-            {
-                return NotFound();
-            }
-
+            IQueryable<MHUser> mhusers = from mhu in _context.MHUser
+                                         select mhu;
             return Ok(mhusers);
         }
+
+        // GET: api/values
+        //[HttpGet]
+        //public IActionResult Get([FromQuery] string username)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    IQueryable<MHUser> mhusers = from mhu in _context.MHUser
+        //                                 select mhu;
+
+
+        //                                 //select new MHUser
+        //                                 //{
+        //                                 //    MHUserId = mhu.MHUserId,
+        //                                 //    Username = mhu.Username,
+        //                                 //    EmailAddress = mhu.EmailAddress
+        //                                 //    //Albums = mhu.Albums
+        //                                 //};
+        //    if (username != null)
+        //    {
+        //        mhusers = mhusers.Where(u => u.Username == username);
+        //    }
+
+        //    if (mhusers == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(mhusers);
+        //}
 
         // GET api/values/5
         [HttpGet("{id}", Name = "GetMHUser")]
