@@ -12,6 +12,7 @@ namespace team_music_history_api_back_end.Models
         public int AlbumId { get; set; }
         public string Genre { get; set; }
         public string Author { get; set; }
+        public string Image { get; set; }
 
         public Album Albums { get; set; }
     }

@@ -31,15 +31,38 @@ namespace team_music_history_api_back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            IQueryable<object> album = from i in _context.Song
-                                       select i;
+            //IQueryable<object> song = from i in _context.Song
+            //                           select i;
 
-            if (album == null)
+            IQueryable<object> song = from s in _context.Song
+                                      join a in _context.Album
+                                      on s.AlbumId equals a.AlbumId
+                                      join m in _context.MHUser
+                                      on a.MHUserId equals m.MHUserId
+                                      select new
+                                      {
+                                          MHUserId = a.MHUserId,
+                                          Username = m.Username,
+                                          EmailAddress = m.EmailAddress,
+                                          SongId = s.SongId,
+                                          SongName = s.Name,
+                                          AlbumId = s.AlbumId,
+                                          Genre = s.Genre,
+                                          Author = s.Author,
+                                          Image = s.Image,
+                                          Artist = a.Artist,
+                                          Year = a.Year,
+                                          AlbumName = a.Name
+
+                                      };
+
+
+            if (song == null)
             {
                 return NotFound();
             }
 
-            return Ok(album);
+            return Ok(song);
         }
 
         // GET api/values/5
@@ -51,33 +74,33 @@ namespace team_music_history_api_back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            Song album = _context.Song.Single(m => m.SongId == id);
+            Song song = _context.Song.Single(m => m.SongId == id);
 
-            if (album == null)
+            if (song == null)
             {
                 return NotFound();
             }
 
-            return Ok(album);
+            return Ok(song);
         }
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody]Song album)
+        public IActionResult Post([FromBody]Song song)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Song.Add(album);
+            _context.Song.Add(song);
             try
             {
                 _context.SaveChanges();
             }
             catch (DbUpdateException)
             {
-                if (AlbumExists(album.SongId))
+                if (SongExists(song.SongId))
                 {
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 }
@@ -87,24 +110,24 @@ namespace team_music_history_api_back_end.Controllers
                 }
             }
 
-            return CreatedAtRoute("GetSong", new { id = album.SongId }, album);
+            return CreatedAtRoute("GetSong", new { id = song.SongId }, song);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Song album)
+        public IActionResult Put(int id, [FromBody] Song song)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != album.SongId)
+            if (id != song.SongId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(album).State = EntityState.Modified;
+            _context.Entry(song).State = EntityState.Modified;
 
             try
             {
@@ -112,7 +135,7 @@ namespace team_music_history_api_back_end.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AlbumExists(id))
+                if (!SongExists(id))
                 {
                     return NotFound();
                 }
@@ -134,19 +157,19 @@ namespace team_music_history_api_back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            Song album = _context.Song.Single(m => m.SongId == id);
-            if (album == null)
+            Song song = _context.Song.Single(m => m.SongId == id);
+            if (song == null)
             {
                 return NotFound();
             }
 
-            _context.Song.Remove(album);
+            _context.Song.Remove(song);
             _context.SaveChanges();
 
-            return Ok(album);
+            return Ok(song);
         }
 
-        private bool AlbumExists(int id)
+        private bool SongExists(int id)
         {
             return _context.Song.Count(e => e.SongId == id) > 0;
         }
